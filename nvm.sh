@@ -527,7 +527,7 @@ nvm_ensure_version_installed() {
       nvm_err "N/A: version \"${PREFIXED_VERSION:-$PROVIDED_VERSION}\" is not yet installed."
     fi
     nvm_err ""
-    nvm_err "You need to run \"nvm install ${PROVIDED_VERSION}\" to install it before using it."
+    nvm_err "You need to run \"nvm install\" to install it before using it."
     return 1
   fi
 }
@@ -3590,7 +3590,7 @@ nvm() {
         if [ "${NVM_SILENT:-0}" -ne 1 ]; then
           nvm_err "N/A: version \"${PROVIDED_VERSION} -> ${VERSION}\" is not yet installed."
           nvm_err ""
-          nvm_err "You need to run \"nvm install ${PROVIDED_VERSION}\" to install it before using it."
+          nvm_err "You need to run \"nvm install\" to install it before using it."
         fi
         return 3
       # This nvm_ensure_version_installed call can be a performance bottleneck
