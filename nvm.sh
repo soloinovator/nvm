@@ -506,6 +506,8 @@ nvm_version_path() {
 nvm_ensure_version_installed() {
   local PROVIDED_VERSION
   PROVIDED_VERSION="${1-}"
+  local IS_VERSION_FROM_NVMRC
+  IS_VERSION_FROM_NVMRC="${2-}"
   if [ "${PROVIDED_VERSION}" = 'system' ]; then
     if nvm_has_system_iojs || nvm_has_system_node; then
       return 0
@@ -527,7 +529,11 @@ nvm_ensure_version_installed() {
       nvm_err "N/A: version \"${PREFIXED_VERSION:-$PROVIDED_VERSION}\" is not yet installed."
     fi
     nvm_err ""
-    nvm_err "You need to run \"nvm install ${PROVIDED_VERSION}\" to install it before using it."
+    if [ "$IS_VERSION_FROM_NVMRC" -ne 1 ]; then
+        nvm_err "You need to run \"nvm install ${PROVIDED_VERSION}\" to install it before using it."
+      else
+        nvm_err "You need to run \"nvm install\" to install it before using it."
+    fi
     return 1
   fi
 }
@@ -3522,6 +3528,8 @@ nvm() {
       local NVM_DELETE_PREFIX
       NVM_DELETE_PREFIX=0
       local NVM_LTS
+      local IS_VERSION_FROM_NVMRC
+      IS_VERSION_FROM_NVMRC=0
 
       while [ $# -ne 0 ]; do
         case "$1" in
@@ -3549,6 +3557,7 @@ nvm() {
         NVM_SILENT="${NVM_SILENT:-0}" nvm_rc_version
         if [ -n "${NVM_RC_VERSION-}" ]; then
           PROVIDED_VERSION="${NVM_RC_VERSION}"
+          IS_VERSION_FROM_NVMRC=1
           VERSION="$(nvm_version "${PROVIDED_VERSION}")"
         fi
         unset NVM_RC_VERSION
@@ -3590,12 +3599,16 @@ nvm() {
         if [ "${NVM_SILENT:-0}" -ne 1 ]; then
           nvm_err "N/A: version \"${PROVIDED_VERSION} -> ${VERSION}\" is not yet installed."
           nvm_err ""
-          nvm_err "You need to run \"nvm install ${PROVIDED_VERSION}\" to install it before using it."
+          if [ "${IS_VERSION_FROM_NVMRC}" -ne 1 ]; then
+              nvm_err "You need to run \"nvm install ${PROVIDED_VERSION}\" to install it before using it."
+            else
+              nvm_err "You need to run \"nvm install\" to install it before using it."
+          fi
         fi
         return 3
       # This nvm_ensure_version_installed call can be a performance bottleneck
       # on shell startup. Perhaps we can optimize it away or make it faster.
-      elif ! nvm_ensure_version_installed "${VERSION}"; then
+      elif ! nvm_ensure_version_installed "${VERSION}" "${IS_VERSION_FROM_NVMRC}"; then
         return $?
       fi
 
