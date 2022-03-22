@@ -529,7 +529,7 @@ nvm_ensure_version_installed() {
       nvm_err "N/A: version \"${PREFIXED_VERSION:-$PROVIDED_VERSION}\" is not yet installed."
     fi
     nvm_err ""
-    if [ "$IS_VERSION_FROM_NVMRC" -ne 1 ]; then
+    if [ "${IS_VERSION_FROM_NVMRC}" != "1" ]; then
         nvm_err "You need to run \"nvm install ${PROVIDED_VERSION}\" to install it before using it."
       else
         nvm_err "You need to run \"nvm install\" to install it before using it."
@@ -3599,7 +3599,7 @@ nvm() {
         if [ "${NVM_SILENT:-0}" -ne 1 ]; then
           nvm_err "N/A: version \"${PROVIDED_VERSION} -> ${VERSION}\" is not yet installed."
           nvm_err ""
-          if [ "${IS_VERSION_FROM_NVMRC}" -ne 1 ]; then
+          if [ "${IS_VERSION_FROM_NVMRC}" != "1" ]; then
               nvm_err "You need to run \"nvm install ${PROVIDED_VERSION}\" to install it before using it."
             else
               nvm_err "You need to run \"nvm install\" to install it before using it."
