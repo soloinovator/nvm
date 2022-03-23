@@ -3596,16 +3596,9 @@ nvm() {
         return 8
       fi
       if [ "${VERSION}" = 'N/A' ]; then
-        if [ "${NVM_SILENT:-0}" -ne 1 ]; then
-          nvm_err "N/A: version \"${PROVIDED_VERSION} -> ${VERSION}\" is not yet installed."
-          nvm_err ""
-          if [ "${IS_VERSION_FROM_NVMRC}" != "1" ]; then
-              nvm_err "You need to run \`nvm install ${PROVIDED_VERSION}\` to install and use it."
-            else
-              nvm_err 'You need to run `nvm install` to install and use the node version specified in `.nvmrc`.'
-          fi
+        if ! nvm_ensure_version_installed "${PROVIDED_VERSION}" "${IS_VERSION_FROM_NVMRC}"; then
+          return 3
         fi
-        return 3
       # This nvm_ensure_version_installed call can be a performance bottleneck
       # on shell startup. Perhaps we can optimize it away or make it faster.
       elif ! nvm_ensure_version_installed "${VERSION}" "${IS_VERSION_FROM_NVMRC}"; then
