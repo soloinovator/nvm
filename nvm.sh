@@ -3596,9 +3596,10 @@ nvm() {
         return 8
       fi
       if [ "${VERSION}" = 'N/A' ]; then
-        if ! nvm_ensure_version_installed "${PROVIDED_VERSION}" "${IS_VERSION_FROM_NVMRC}"; then
-          return 3
+        if [ "${NVM_SILENT:-0}" -ne 1 ]; then
+          nvm_ensure_version_installed "${PROVIDED_VERSION}" "${IS_VERSION_FROM_NVMRC}";
         fi
+        return 3
       # This nvm_ensure_version_installed call can be a performance bottleneck
       # on shell startup. Perhaps we can optimize it away or make it faster.
       elif ! nvm_ensure_version_installed "${VERSION}" "${IS_VERSION_FROM_NVMRC}"; then
