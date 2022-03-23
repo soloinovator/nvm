@@ -3597,7 +3597,7 @@ nvm() {
       fi
       if [ "${VERSION}" = 'N/A' ]; then
         if [ "${NVM_SILENT:-0}" -ne 1 ]; then
-          nvm_ensure_version_installed "${PROVIDED_VERSION}" "${IS_VERSION_FROM_NVMRC}";
+          nvm_ensure_version_installed "${PROVIDED_VERSION}" "${IS_VERSION_FROM_NVMRC}"
         fi
         return 3
       # This nvm_ensure_version_installed call can be a performance bottleneck
