@@ -530,9 +530,9 @@ nvm_ensure_version_installed() {
     fi
     nvm_err ""
     if [ "${IS_VERSION_FROM_NVMRC}" != "1" ]; then
-        nvm_err "You need to run \"nvm install ${PROVIDED_VERSION}\" to install it before using it."
+        nvm_err "You need to run \`nvm install ${PROVIDED_VERSION}\` to install and use it."
       else
-        nvm_err "You need to run \"nvm install\" to install it before using it."
+        nvm_err 'You need to run `nvm install` to install and use the node version specified in `.nvmrc`.'
     fi
     return 1
   fi
@@ -3600,9 +3600,9 @@ nvm() {
           nvm_err "N/A: version \"${PROVIDED_VERSION} -> ${VERSION}\" is not yet installed."
           nvm_err ""
           if [ "${IS_VERSION_FROM_NVMRC}" != "1" ]; then
-              nvm_err "You need to run \"nvm install ${PROVIDED_VERSION}\" to install it before using it."
+              nvm_err "You need to run \`nvm install ${PROVIDED_VERSION}\` to install and use it."
             else
-              nvm_err "You need to run \"nvm install\" to install it before using it."
+              nvm_err 'You need to run `nvm install` to install and use the node version specified in `.nvmrc`.'
           fi
         fi
         return 3
