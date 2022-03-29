@@ -3657,6 +3657,8 @@ nvm() {
       local provided_version
       local has_checked_nvmrc
       has_checked_nvmrc=0
+      local IS_VERSION_FROM_NVMRC
+      IS_VERSION_FROM_NVMRC=0
       # run given version of node
 
       local NVM_SILENT
@@ -3702,7 +3704,9 @@ nvm() {
             if [ $has_checked_nvmrc -ne 1 ]; then
               NVM_SILENT="${NVM_SILENT:-0}" nvm_rc_version && has_checked_nvmrc=1
             fi
-            VERSION="$(nvm_version "${NVM_RC_VERSION}")" ||:
+            provided_version="${NVM_RC_VERSION}"
+            IS_VERSION_FROM_NVMRC=1
+            VERSION="$(nvm_version "${provided_version}")" ||:
             unset NVM_RC_VERSION
           else
             shift
@@ -3724,7 +3728,7 @@ nvm() {
         VERSION=''
       fi
       if [ "_${VERSION}" = "_N/A" ]; then
-        nvm_ensure_version_installed "${provided_version}"
+        nvm_ensure_version_installed "${provided_version}" "${IS_VERSION_FROM_NVMRC}"
       elif [ "${NVM_IOJS}" = true ]; then
         nvm exec "${NVM_SILENT_ARG-}" "${LTS_ARG-}" "${VERSION}" iojs "$@"
       else

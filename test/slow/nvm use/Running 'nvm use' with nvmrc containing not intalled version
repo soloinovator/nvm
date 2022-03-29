@@ -8,7 +8,7 @@ nvm deactivate 2>&1 >/dev/null || die 'deactivate failed'
 
 echo "foo" > .nvmrc
 
-# running nvm use should not print the version information
+# running nvm use with .nvmrc should not print the version information
 OUTPUT="$(nvm use 2>&1)"
 EXIT_CODE=$?
 EXPECTED_OUTPUT="Found '$PWD/.nvmrc' with version <foo>
